@@ -1,6 +1,9 @@
+using LotteryWeb.Models.Data;
+using LotteryWeb.Models.Data.EFCoreRepository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,6 +27,12 @@ namespace LotteryWeb
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            services.AddDbContext<DatabaseContext>(x => x.UseSqlServer(Configuration.GetConnectionString("conString")));
+            services.AddScoped<UserRepository>();
+            services.AddScoped<LotteryRepository>();
+            services.AddScoped<BetRepository>();
+            services.AddScoped<WinnerRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
