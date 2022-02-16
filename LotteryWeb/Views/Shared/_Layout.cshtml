@@ -6,6 +6,7 @@
     <title>@ViewData["Title"] - LotteryWeb</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    @await RenderSectionAsync("Style", required: false)
 </head>
 <body>
     <header>
@@ -28,12 +29,40 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Users</a>
                         </li>
                     </ul>
+                    <ul class="navbar-nav">
+                        @if (string.IsNullOrWhiteSpace(Context.Request.Cookies["user"]))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Register">Register</a>
+                            </li>
+                        } else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="LogOut">LogOut (@Context.Request.Cookies["user"])</a>
+                            </li>   
+                        }
+                    </ul>
                 </div>
             </div>
         </nav>
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+            @if (TempData["message"] != null)
+            {
+                <div class="text-success">
+                    @TempData["message"]
+                </div>
+            }
+            @if (TempData["alert"] != null)
+            {
+                <div class="text-danger">
+                    @TempData["alert"]
+                </div>
+            }
             @RenderBody()
         </main>
     </div>

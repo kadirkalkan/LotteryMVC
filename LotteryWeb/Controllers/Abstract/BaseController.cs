@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 
 namespace LotteryWeb.Controllers.Abstract
 {
+
+    [Route("[controller]/{action=Index}")]
     public abstract class BaseController<TEntity, TRepository> : Controller
          where TEntity : class, IEntity
         where TRepository : IRepository<TEntity>
     {
-        private readonly TRepository _repository;
+        protected readonly TRepository _repository;
 
         public BaseController(TRepository repository)
         {

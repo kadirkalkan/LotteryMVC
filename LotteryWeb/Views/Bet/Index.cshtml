@@ -1,0 +1,9 @@
+﻿@model IEnumerable<Bet>
+
+    
+<ul>
+    @foreach (var bet in Model)
+    {
+        <li>@($"{bet.Number1} - {bet.Number2} - {bet.Number3} - {bet.Number4} - {bet.Number5} - {bet.Number6}")</li>
+    }
+</ul>

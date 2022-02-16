@@ -9,7 +9,7 @@ namespace LotteryWeb.Models.Data.EFCoreRepository.Abstract
         where TEntity : class, IEntity
         where TContext : DbContext
     {
-        private readonly TContext _context;
+        protected readonly TContext _context;
         public Repository(TContext context)
         {
             _context = context;
