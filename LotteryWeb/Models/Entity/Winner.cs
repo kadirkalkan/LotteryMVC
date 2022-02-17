@@ -9,16 +9,12 @@ using System.Threading.Tasks;
 
 namespace LotteryWeb.Models.Entity
 {
-    [Table("Winners")]
     public class Winner : IEntity
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        public decimal Prize { get; set; }
 
-        [ForeignKey("Bet")]
         public int BetId { get; set; }
         public Bet Bet { get; set; }
-        [Column(TypeName = "decimal(18, 2)")]
-        public decimal Prize { get; set; }
     }
 }

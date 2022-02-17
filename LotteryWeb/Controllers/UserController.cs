@@ -4,18 +4,22 @@ using LotteryWeb.Models.Data.EFCoreRepository;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using LotteryWeb.ModelViews.User;
+using LotteryWeb.Models.Interfaces;
 
-namespace LotteryWeb.Controllers.CrudController
+namespace LotteryWeb.Controllers
 {
-    public class UserController : BaseController<User, UserRepository>
+    public class UserController : Controller
     {
-        public UserController(UserRepository repository) : base(repository)
+        private UserRepository _repository;
+        public UserController(UserRepository repository) 
         {
+            _repository = repository;
         }
 
         public async Task<IActionResult> Index()
         {
-            return View(await Get()); // Get Metodu BaseController'dan geliyor.
+            var list = await _repository.GetAll();
+            return View(list);
         }
 
         public IActionResult Login()
@@ -66,7 +70,7 @@ namespace LotteryWeb.Controllers.CrudController
                     Password = vm.Password
                 };
 
-                await Post(user);
+                await _repository.Add(user);
 
                 TempData["message"] = "You have successfully registered.";
                 return RedirectToAction("Login", "User");

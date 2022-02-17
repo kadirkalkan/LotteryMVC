@@ -1,4 +1,5 @@
 ﻿using LotteryWeb.Models.Entity;
+using LotteryWeb.Models.EntityConfiguration;
 using Microsoft.EntityFrameworkCore;
 
 namespace LotteryWeb.Models.Data
@@ -16,9 +17,10 @@ namespace LotteryWeb.Models.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>().HasData(
-                new User() { Id = 1, Username = "admin", Password = "123456789", Balance = 1000}
-                );
+            modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new BetEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new LotteryEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new WinnerEntityConfiguration());
         }
     }
 }

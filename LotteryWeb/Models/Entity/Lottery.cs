@@ -9,10 +9,8 @@ using System.Threading.Tasks;
 
 namespace LotteryWeb.Models.Entity
 {
-    [Table("Lotteries")]
     public class Lottery : IEntity
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public int Number1 { get; set; }
         public int Number2 { get; set; }

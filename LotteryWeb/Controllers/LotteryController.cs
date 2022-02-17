@@ -3,12 +3,14 @@ using LotteryWeb.Models.Data.EFCoreRepository;
 using LotteryWeb.Models.Entity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LotteryWeb.Controllers.CrudController
+namespace LotteryWeb.Controllers
 {
-    public class LotteryController : BaseController<Lottery, LotteryRepository>
+    public class LotteryController : Controller
     {
-        public LotteryController(LotteryRepository repository) : base(repository)
+        private readonly LotteryRepository _repository;
+        public LotteryController(LotteryRepository repository)
         {
+            _repository = repository;   
         }
 
         public IActionResult Index()

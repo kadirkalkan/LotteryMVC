@@ -19,7 +19,7 @@ namespace LotteryWeb.Migrations
                     Number4 = table.Column<int>(type: "int", nullable: false),
                     Number5 = table.Column<int>(type: "int", nullable: false),
                     Number6 = table.Column<int>(type: "int", nullable: false),
-                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
                     DrawDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -81,8 +81,8 @@ namespace LotteryWeb.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    BetId = table.Column<int>(type: "int", nullable: false),
-                    Prize = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    Prize = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    BetId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -94,6 +94,11 @@ namespace LotteryWeb.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Balance", "Password", "Username" },
+                values: new object[] { 1, 1000m, "123456789", "admin" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bets_LotteryId",

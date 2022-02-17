@@ -9,10 +9,8 @@ using System.Threading.Tasks;
 
 namespace LotteryWeb.Models.Entity
 {
-    [Table("Bets")]
     public class Bet : IEntity
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public int Number1 { get; set; }
         public int Number2 { get; set; }
@@ -20,13 +18,10 @@ namespace LotteryWeb.Models.Entity
         public int Number4 { get; set; }
         public int Number5 { get; set; }
         public int Number6 { get; set; }
-
-
-        [ForeignKey("User")]
+ 
         public int UserId { get; set; }
         public User User { get; set; }
 
-        [ForeignKey("Lottery")]
         public int LotteryId { get; set; }
         public Lottery Lottery { get; set; }
 
