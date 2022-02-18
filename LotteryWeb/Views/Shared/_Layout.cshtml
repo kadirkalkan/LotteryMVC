@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using LotteryWeb.Extensions
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -23,26 +24,28 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Users</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Play">Play</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav">
-                        @if (string.IsNullOrWhiteSpace(Context.Request.Cookies["user"]))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Login">Login</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Register">Register</a>
-                            </li>
-                        } else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="LogOut">LogOut (@Context.Request.Cookies["user"])</a>
-                            </li>   
+
+                        @{
+                            var user = Context.Session.GetObject<LoginSessionDTO>("user");
+                            if (user is null)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Login">Login</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Register">Register</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="LogOut">LogOut (@user.Username)</a>
+                                </li>
+                            }
                         }
                     </ul>
                 </div>
@@ -53,13 +56,13 @@
         <main role="main" class="pb-3">
             @if (TempData["message"] != null)
             {
-                <div class="text-success">
+                <div class="text-success text-center">
                     @TempData["message"]
                 </div>
             }
             @if (TempData["alert"] != null)
             {
-                <div class="text-danger">
+                <div class="text-danger text-center">
                     @TempData["alert"]
                 </div>
             }
@@ -73,6 +76,9 @@
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <partial name="_ValidationScriptsPartial" />
+
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)

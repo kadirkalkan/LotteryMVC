@@ -1,3 +1,4 @@
+using FluentValidation.AspNetCore;
 using LotteryWeb.Models.Data;
 using LotteryWeb.Models.Data.EFCoreRepository;
 using Microsoft.AspNetCore.Builder;
@@ -26,13 +27,19 @@ namespace LotteryWeb
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddFluentValidation(x=> x.RegisterValidatorsFromAssemblyContaining<Startup>());
 
             services.AddDbContext<DatabaseContext>(x => x.UseSqlServer(Configuration.GetConnectionString("conString")));
             services.AddScoped<UserRepository>();
             services.AddScoped<LotteryRepository>();
             services.AddScoped<BetRepository>();
             services.AddScoped<WinnerRepository>();
+
+            services.AddSession(option =>
+            {
+                //Süre 1 dk olarak belirlendi
+                option.IdleTimeout = TimeSpan.FromMinutes(1);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,6 +58,8 @@ namespace LotteryWeb
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+
+            app.UseSession();
             app.UseRouting();
             app.UseAuthorization();
 

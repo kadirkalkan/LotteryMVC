@@ -26,5 +26,33 @@ namespace LotteryWeb.Models.Entity
         public Lottery Lottery { get; set; }
 
         public ICollection<Winner> Winners { get; set; }
+
+
+        public int GetMatchCount()
+        {
+            int matchCount = 0;
+            List<int> numbers = new List<int>() {
+                Number1,
+                Number2,
+                Number3,
+                Number4,
+                Number5,
+                Number6,
+            };
+            List<int> luckyNumbers = new List<int>() {
+                Lottery.Number1,
+                Lottery.Number2,
+                Lottery.Number3,
+                Lottery.Number4,
+                Lottery.Number5,
+                Lottery.Number6,
+            };
+            foreach (var item in numbers)
+            {
+                if(luckyNumbers.Contains(item))
+                    matchCount++;
+            }
+            return matchCount;
+        }
     }
 }

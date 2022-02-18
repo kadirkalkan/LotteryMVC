@@ -3,8 +3,11 @@ using LotteryWeb.Controllers.Abstract;
 using LotteryWeb.Models.Data.EFCoreRepository;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using LotteryWeb.ModelViews.User;
+using LotteryWeb.ViewModels.User;
 using LotteryWeb.Models.Interfaces;
+using Microsoft.AspNetCore.Http;
+using LotteryWeb.Extensions;
+using LotteryWeb.DTOs;
 
 namespace LotteryWeb.Controllers
 {
@@ -16,14 +19,9 @@ namespace LotteryWeb.Controllers
             _repository = repository;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Login(string message)
         {
-            var list = await _repository.GetAll();
-            return View(list);
-        }
-
-        public IActionResult Login()
-        {
+            TempData["alert"] = message;
             return View();
         }
 
@@ -35,7 +33,8 @@ namespace LotteryWeb.Controllers
                 var user = _repository.GetLoggedUser(vm.Username, vm.Password);
                 if (user != null)
                 {
-                    HttpContext.Response.Cookies.Append("user", vm.Username);
+                    HttpContext.Session.SetObject("user", new LoginSessionDTO(user.Id, user.Username));
+
                     TempData["message"] = "You have successfully logged in.";
                     return RedirectToAction("Index", "Home");
                 }
@@ -46,7 +45,6 @@ namespace LotteryWeb.Controllers
             }
             return View(vm);
         }
-
 
         public IActionResult Register()
         {
@@ -80,7 +78,7 @@ namespace LotteryWeb.Controllers
 
         public IActionResult LogOut()
         {
-            HttpContext.Response.Cookies.Delete("user");
+            HttpContext.Session.Remove("user");
             return RedirectToAction("Index", "Home");
         }
     }

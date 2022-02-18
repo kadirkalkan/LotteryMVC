@@ -1,12 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LotteryWeb.ModelViews.User
+namespace LotteryWeb.ViewModels.User
 {
-    public class RegisterViewModel
+    public class LoginViewModel
     {
-        [Required, MaxLength(50)]
         public string Username { get; set; }
-        [Required, MaxLength(50)]
         public string Password { get; set; }
     }
 }
