@@ -14,7 +14,7 @@ namespace LotteryWeb.Controllers
     public class UserController : Controller
     {
         private UserRepository _repository;
-        public UserController(UserRepository repository) 
+        public UserController(UserRepository repository)
         {
             _repository = repository;
         }
@@ -80,6 +80,27 @@ namespace LotteryWeb.Controllers
         {
             HttpContext.Session.Remove("user");
             return RedirectToAction("Index", "Home");
+        }
+
+
+        public async Task<IActionResult> Profile()
+        {
+            var loggedUser = HttpContext.Session.GetObject<LoginSessionDTO>("user");
+            var userDb = await _repository.Get(loggedUser.Id);
+            UserProfileViewModel model = new UserProfileViewModel()
+            {
+                User = userDb
+            };
+            return View(model);
+        }
+
+        public async Task<IActionResult> AddBalance(int id)
+        {
+            var userDb = await _repository.Get(id);
+            userDb.Balance += 5;
+            userDb = await _repository.Update(userDb);
+
+            return Content(userDb.Balance.ToString());
         }
     }
 }
