@@ -1,0 +1,11 @@
+﻿@model LotteryPlanViewModel
+
+<h1>Bir Çekiliş Planlayın</h1>
+
+<form asp-action="PlanLottery" method="post">
+    <div class="form-group">
+        <input asp-for="DrawDate" class="form-control" type="datetime-local" />
+        <span asp-validation-for="DrawDate"></span>
+    </div>
+    <button class="btn btn-success">Planla</button>
+</form>

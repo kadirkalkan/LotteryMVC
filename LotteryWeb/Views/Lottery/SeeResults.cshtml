@@ -1,0 +1,35 @@
+﻿@model BetLotteryResultViewModel
+
+
+<h1 class="text-center">SONUÇLAR</h1>
+
+
+<div class="row">
+    <div class="col-md-6">
+        <ul class="list-group">
+            <li class="list-group-item list-group-item-success">6 Bilen Sayısı: @Model.SuccessCounts[6]</li>
+            <li class="list-group-item list-group-item-info">5 Bilen Sayısı: @Model.SuccessCounts[5]</li>
+            <li class="list-group-item list-group-item-primary">4 Bilen Sayısı: @Model.SuccessCounts[4]</li>
+        </ul>
+    </div>
+
+    <div class="col-md-6">
+        <ul class="list-group">
+            <li class="list-group-item list-group-item-secondary">3 Bilen Sayısı: @Model.SuccessCounts[3]</li>
+            <li class="list-group-item list-group-item-warning">2 Bilen Sayısı: @Model.SuccessCounts[2]</li>
+            <li class="list-group-item list-group-item-dark">1 Bilen Sayısı: @Model.SuccessCounts[1]</li>
+            <li class="list-group-item list-group-item-danger">Hiç bilemeyen: @Model.SuccessCounts[0]</li>
+        </ul>
+    </div>
+</div>
+
+<div class="row display-3 mt-5">
+    @foreach (var number in Model.LotteryResultNumbers)
+    {
+        <div class="col-md-2 text-center border border-dark">@number</div>
+    }
+</div>
+
+
+
+

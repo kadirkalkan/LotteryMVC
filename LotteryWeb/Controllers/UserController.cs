@@ -8,6 +8,7 @@ using LotteryWeb.Models.Interfaces;
 using Microsoft.AspNetCore.Http;
 using LotteryWeb.Extensions;
 using LotteryWeb.DTOs;
+using LotteryWeb.Filters;
 
 namespace LotteryWeb.Controllers
 {
@@ -82,7 +83,7 @@ namespace LotteryWeb.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-
+        [Login]
         public async Task<IActionResult> Profile()
         {
             var loggedUser = HttpContext.Session.GetObject<LoginSessionDTO>("user");

@@ -26,8 +26,15 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Play">Play</a>
                         </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="false">Çekiliş</a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" asp-controller="Lottery" asp-action="PlanLottery">Çekiliş Planla</a>
+                                <a class="dropdown-item" asp-controller="Lottery" asp-action="AllLotteries">Çekilişleri Göster</a>
+                            </div>
+                        </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Profile">Profil</a>
+                            <a class="nav-link text-dark" asp-controller="User" asp-action="Profile">Profil</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav">
