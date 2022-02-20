@@ -1,4 +1,5 @@
 ﻿using LotteryWeb.Controllers.Abstract;
+using LotteryWeb.Filters;
 using LotteryWeb.Models.Data.EFCoreRepository;
 using LotteryWeb.Models.Entity;
 using LotteryWeb.ViewModels.Bet;
@@ -22,12 +23,14 @@ namespace LotteryWeb.Controllers
             _betRepository = betRepository;
         }
 
+        [Login]
         public IActionResult PlanLottery()
         {
 
             return View();
         }
         [HttpPost]
+        [Login]
         public async Task<IActionResult> PlanLottery(LotteryPlanViewModel vm)
         {
             if (ModelState.IsValid)
@@ -43,13 +46,25 @@ namespace LotteryWeb.Controllers
             }
             return View();
         }
-
         public async Task<IActionResult> AllLotteries()
         {
-            var model = await _lotteryRepository.GetAll();
+            var lotteryList = await _lotteryRepository.GetAll();
+            var model = lotteryList.Select(x => new LotteryDetailsViewModel()
+            {
+                Id = x.Id,
+                CreateDate = x.CreateDate,
+                DrawDate = x.DrawDate,
+                Number1 = x.Number1,
+                Number2 = x.Number2,
+                Number3 = x.Number3,
+                Number4 = x.Number4,
+                Number5 = x.Number5,
+                Number6 = x.Number6,
+                IsBetable = x.Status == "Çekilmedi" ? true : false
+            }).ToList() ;
             return View(model);
         }
-
+        [Login]
         public async Task<IActionResult> Draw(int id)
         {
             var lottery = await _lotteryRepository.Get(id);
@@ -75,7 +90,6 @@ namespace LotteryWeb.Controllers
             lottery.Number4 = randomNumbers[3];
             lottery.Number5 = randomNumbers[4];
             lottery.Number6 = randomNumbers[5];
-
             lottery.Status = "Çekildi";
 
             await _lotteryRepository.Update(lottery);
@@ -107,9 +121,9 @@ namespace LotteryWeb.Controllers
                 for (int i = 0; i < 6; i++)
                     if (lotteryNumberList.Contains(betNumberList[i]))
                         rightGuessCounter++;
-
                 model.SuccessCounts[rightGuessCounter]++;
             }
+
 
             return View(model);
         }

@@ -8,9 +8,9 @@ namespace LotteryWeb.Models.Validators.Bet
     public class BetViewModelValidator : AbstractValidator<BetViewModel>
     {
         private static readonly int minNumber = 1;
-        private static readonly int maxNumber = 50;
+        private static readonly int maxNumber = 49;
 
-        private readonly string notNullMessage = "Bu Verinin Girilmesi Mecburidir.";
+        private readonly string notNullMessage = "Verinin Girilmesi Mecburidir.";
         private readonly string inclusiveBetweenMessage = $"Lütfen {minNumber} ile {maxNumber} arasında bir değer girin.";
 
         public BetViewModelValidator()
@@ -25,13 +25,13 @@ namespace LotteryWeb.Models.Validators.Bet
                 RuleFor(x=>x.Number6),
             };
 
-            foreach (var rule in ruleList)
+            for (int i = 0; i < ruleList.Count; i++)
             {
-                rule
-                    .NotNull().WithMessage(notNullMessage)
-                    .NotEmpty().WithMessage(notNullMessage)
-                    .InclusiveBetween(minNumber, maxNumber).WithMessage(inclusiveBetweenMessage);
-            }           
+                ruleList[i]
+                    .NotNull().WithMessage($"{i + 1}. sayı için {notNullMessage}")
+                    .NotEmpty().WithMessage($"{i + 1}. sayı için {notNullMessage}")
+                    .InclusiveBetween(minNumber, maxNumber).WithMessage($"{i + 1}. sayı için {inclusiveBetweenMessage}");
+            }
         }
     }
 }
