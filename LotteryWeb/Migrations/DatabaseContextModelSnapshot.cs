@@ -52,6 +52,9 @@ namespace LotteryWeb.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
+                    b.Property<int>("WinnerId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("LotteryId");
@@ -143,21 +146,12 @@ namespace LotteryWeb.Migrations
             modelBuilder.Entity("LotteryWeb.Models.Entity.Winner", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("BetId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Prize")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BetId");
 
                     b.ToTable("Winners");
                 });
@@ -184,8 +178,8 @@ namespace LotteryWeb.Migrations
             modelBuilder.Entity("LotteryWeb.Models.Entity.Winner", b =>
                 {
                     b.HasOne("LotteryWeb.Models.Entity.Bet", "Bet")
-                        .WithMany("Winners")
-                        .HasForeignKey("BetId")
+                        .WithOne("Winner")
+                        .HasForeignKey("LotteryWeb.Models.Entity.Winner", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -194,7 +188,7 @@ namespace LotteryWeb.Migrations
 
             modelBuilder.Entity("LotteryWeb.Models.Entity.Bet", b =>
                 {
-                    b.Navigation("Winners");
+                    b.Navigation("Winner");
                 });
 
             modelBuilder.Entity("LotteryWeb.Models.Entity.Lottery", b =>

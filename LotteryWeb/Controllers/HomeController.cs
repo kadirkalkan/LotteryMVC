@@ -40,33 +40,12 @@ namespace LotteryWeb.Controllers
             var user = HttpContext.Session.GetObject<LoginSessionDTO>("user");
             var dbUser = await _userRepository.Get(user.Id);
 
-            #region KadirHoca
-            //var dataList = (await _betRepository.GetAll())
-            //    .Where(x=> x.UserId.Equals(user.Id))
-            //    .Select(x => new PlayViewModelData()
-            //    {
-            //        Id = x.Id,
-            //        Number1 = x.Number1,
-            //        Number2 = x.Number2,
-            //        Number3 = x.Number3,
-            //        Number4 = x.Number4,
-            //        Number5 = x.Number5,
-            //        Number6 = x.Number6,
-            //        MatchCount = x.GetMatchCount()
-            //    }).ToList();
-
-            //var vm = new PlayViewModel()
-            //{
-            //    Balance = dbUser.Balance,
-            //    Data = dataList
-            //}; 
-            #endregion
             var userBetList = _betRepository.GetBetsByUserId(dbUser.Id);
             List<UserBetDetailViewModel> subModel = new List<UserBetDetailViewModel>();
 
             foreach (var userBet in userBetList)
             {
-                List<int> userNumbers = new List<int>() { userBet.Number1, userBet.Number2, userBet.Number3, userBet.Number4, userBet.Number5, userBet.Number6 };
+                List<int> userNumbers = userBet.GetNumbers();
                 userNumbers.Sort();
                 subModel.Add(new UserBetDetailViewModel()
                 {
@@ -93,11 +72,13 @@ namespace LotteryWeb.Controllers
         {
             var bet = _betRepository.GetBetById(id);
             var lottery = bet.Lottery;
+            var winner = bet.Winner;
 
             LotteryBetDetailViewModel model = new LotteryBetDetailViewModel()
             {
                 Bet = bet,
                 Lottery = lottery,
+                Winner = winner,
                 IsDrawed = lottery.Status == "Çekilmedi" ? false : true
             };
 

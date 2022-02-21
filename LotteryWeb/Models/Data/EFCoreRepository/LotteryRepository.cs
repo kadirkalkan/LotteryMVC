@@ -8,8 +8,6 @@ namespace LotteryWeb.Models.Data.EFCoreRepository
     {
         public LotteryRepository(DatabaseContext context) : base(context)
         {
-        }
-
-       
+        }     
     }
 }

@@ -13,15 +13,15 @@ namespace LotteryWeb.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
+                    DrawDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Number1 = table.Column<int>(type: "int", nullable: false),
                     Number2 = table.Column<int>(type: "int", nullable: false),
                     Number3 = table.Column<int>(type: "int", nullable: false),
                     Number4 = table.Column<int>(type: "int", nullable: false),
                     Number5 = table.Column<int>(type: "int", nullable: false),
-                    Number6 = table.Column<int>(type: "int", nullable: false),
-                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
-                    DrawDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Number6 = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -49,14 +49,15 @@ namespace LotteryWeb.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    LotteryId = table.Column<int>(type: "int", nullable: false),
+                    WinnerId = table.Column<int>(type: "int", nullable: false),
                     Number1 = table.Column<int>(type: "int", nullable: false),
                     Number2 = table.Column<int>(type: "int", nullable: false),
                     Number3 = table.Column<int>(type: "int", nullable: false),
                     Number4 = table.Column<int>(type: "int", nullable: false),
                     Number5 = table.Column<int>(type: "int", nullable: false),
-                    Number6 = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    LotteryId = table.Column<int>(type: "int", nullable: false)
+                    Number6 = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -79,17 +80,15 @@ namespace LotteryWeb.Migrations
                 name: "Winners",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Prize = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    BetId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Prize = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Winners", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Winners_Bets_BetId",
-                        column: x => x.BetId,
+                        name: "FK_Winners_Bets_Id",
+                        column: x => x.Id,
                         principalTable: "Bets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -109,11 +108,6 @@ namespace LotteryWeb.Migrations
                 name: "IX_Bets_UserId",
                 table: "Bets",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Winners_BetId",
-                table: "Winners",
-                column: "BetId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

@@ -16,11 +16,19 @@ namespace LotteryWeb.Controllers
     {
         private readonly LotteryRepository _lotteryRepository;
         private readonly BetRepository _betRepository;
+        private readonly WinnerRepository _winnerRepository;
+        private readonly UserRepository _userRepository;
 
-        public LotteryController(LotteryRepository lotteryRepository, BetRepository betRepository)
+        public LotteryController(
+            LotteryRepository lotteryRepository, 
+            BetRepository betRepository, 
+            WinnerRepository winnerRepository,
+            UserRepository userRepository)
         {
             _lotteryRepository = lotteryRepository;
             _betRepository = betRepository;
+            _winnerRepository = winnerRepository;
+            _userRepository = userRepository;   
         }
 
         [Login]
@@ -29,8 +37,8 @@ namespace LotteryWeb.Controllers
 
             return View();
         }
-        [HttpPost]
-        [Login]
+
+        [Login, HttpPost]
         public async Task<IActionResult> PlanLottery(LotteryPlanViewModel vm)
         {
             if (ModelState.IsValid)
@@ -61,9 +69,10 @@ namespace LotteryWeb.Controllers
                 Number5 = x.Number5,
                 Number6 = x.Number6,
                 IsBetable = x.Status == "Çekilmedi" ? true : false
-            }).ToList() ;
+            }).ToList();
             return View(model);
         }
+
         [Login]
         public async Task<IActionResult> Draw(int id)
         {
@@ -94,6 +103,8 @@ namespace LotteryWeb.Controllers
 
             await _lotteryRepository.Update(lottery);
 
+            await AnnounceWinners(lottery.Id);
+
             return View(lottery);
         }
 
@@ -111,19 +122,12 @@ namespace LotteryWeb.Controllers
             List<Bet> betListOfLottery = _betRepository.GetBetsByLotteryId(id);
 
             BetLotteryResultViewModel model = new BetLotteryResultViewModel();
-            var lotteryNumberList = new List<int>() { lottery.Number1, lottery.Number2, lottery.Number3, lottery.Number4, lottery.Number5, lottery.Number6 };
-            model.LotteryResultNumbers = lotteryNumberList;
-            foreach (var bet in betListOfLottery)
+            model.LotteryResultNumbers = lottery.GetNumbers();
+
+            betListOfLottery.ForEach(x =>
             {
-                var betNumberList = new List<int>() { bet.Number1, bet.Number2, bet.Number3, bet.Number4, bet.Number5, bet.Number6 };
-
-                byte rightGuessCounter = 0;
-                for (int i = 0; i < 6; i++)
-                    if (lotteryNumberList.Contains(betNumberList[i]))
-                        rightGuessCounter++;
-                model.SuccessCounts[rightGuessCounter]++;
-            }
-
+                model.SuccessCounts[x.GetMatchCount()]++;
+            });
 
             return View(model);
         }
@@ -138,6 +142,24 @@ namespace LotteryWeb.Controllers
                     randomNumbers.Add(randomNumber);
             }
             randomNumbers.Sort();
+        }
+
+        private async Task AnnounceWinners(int lotteryId)
+        {
+            var bets = _betRepository.GetBetsByLotteryId(lotteryId);
+            var winners = bets.Where(x => x.GetMatchCount() > 0);
+            foreach (var bet in winners)
+            {
+                Winner winner = new Winner()
+                {
+                    Id = bet.Id,
+                    Prize = (int)Math.Pow((bet.GetMatchCount() * 5), 2)
+
+                };
+                var user = await _userRepository.Get(bet.UserId);
+                user.Balance += winner.Prize;
+                await _winnerRepository.Add(winner);
+            }
         }
     }
 }

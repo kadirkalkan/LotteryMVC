@@ -9,6 +9,7 @@ namespace LotteryWeb.ViewModels.Home
     {
         public Models.Entity.Bet Bet { get; set; }
         public Models.Entity.Lottery Lottery { get; set; }
+        public Models.Entity.Winner Winner { get; set; }
         public bool IsDrawed { get; set; }
     }
 }

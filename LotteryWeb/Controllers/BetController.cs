@@ -46,8 +46,8 @@ namespace LotteryWeb.Controllers
             if (loggedUser == null) return BadRequest();
             if (ModelState.IsValid)
             {
-                HashSet<int> userNumbers = new HashSet<int>() { vm.Number1, vm.Number2, vm.Number3, vm.Number4, vm.Number5, vm.Number6 };
-                if (userNumbers.Count !=6)
+                HashSet<int> userNumbers = vm.GetNumbers().ToHashSet();
+                if (userNumbers.Count != 6)
                 {
                     ModelState.AddModelError("", "Lütfen birbirinden farklı 6 adet sayı girin!");
                     return View();
@@ -65,16 +65,16 @@ namespace LotteryWeb.Controllers
                 };
 
                 await _betRepository.Add(bet);
-             decimal newBalance =   await UpdateUserBalance(loggedUser.Id);
+                decimal newBalance = await GetGameFeeByUserId(loggedUser.Id);
 
                 TempData["successMessage"] = $"Bahis başarıyla oynandı. Yeni bakiyeniz ${newBalance}";
-                return RedirectToAction("AllLotteries","Lottery");
+                return RedirectToAction("AllLotteries", "Lottery");
             }
 
             return View();
         }
 
-        private async Task<decimal> UpdateUserBalance(int id)
+        private async Task<decimal> GetGameFeeByUserId(int id)
         {
             var user = await _userRepository.Get(id);
             user.Balance -= 5;

@@ -23,7 +23,7 @@ namespace LotteryWeb.Models.Data.EFCoreRepository
 
         public Bet GetBetById(int userId)
         {
-            return _context.Bets.Include(x => x.Lottery).FirstOrDefault(x => x.Id == userId);
+            return _context.Bets.Include(x => x.Lottery).Include(x => x.Winner).FirstOrDefault(x => x.Id == userId);
         }
     }
 }

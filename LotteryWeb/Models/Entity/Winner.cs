@@ -13,8 +13,6 @@ namespace LotteryWeb.Models.Entity
     {
         public int Id { get; set; }
         public decimal Prize { get; set; }
-
-        public int BetId { get; set; }
         public Bet Bet { get; set; }
     }
 }

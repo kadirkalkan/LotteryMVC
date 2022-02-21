@@ -31,6 +31,10 @@
     <hr />
 
     <h3>Doğru tahmin sayısı: @Model.Bet.GetMatchCount()</h3>
+    @if(Model.Winner is not null)
+    {
+        <h3>Kazandığınız Para : $@Model.Winner.Prize</h3>
+    }
 
 }
 else

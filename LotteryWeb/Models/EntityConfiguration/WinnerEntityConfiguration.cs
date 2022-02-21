@@ -11,11 +11,10 @@ namespace LotteryWeb.Models.EntityConfiguration
             builder.ToTable("Winners");
 
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.Id).UseIdentityColumn();
 
             builder.Property(x => x.Prize).HasColumnType("decimal(18, 2)");
 
-            builder.HasOne(winner => winner.Bet).WithMany(bet => bet.Winners).HasForeignKey(winner => winner.BetId);
+            builder.HasOne(winner => winner.Bet).WithOne(bet => bet.Winner).HasForeignKey<Winner>(winner => winner.Id);
 
         }
     }

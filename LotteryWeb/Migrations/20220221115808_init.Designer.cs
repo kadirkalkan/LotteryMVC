@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LotteryWeb.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20220217135749_init")]
+    [Migration("20220221115808_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,6 +52,9 @@ namespace LotteryWeb.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WinnerId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -145,21 +148,12 @@ namespace LotteryWeb.Migrations
             modelBuilder.Entity("LotteryWeb.Models.Entity.Winner", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("BetId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Prize")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BetId");
 
                     b.ToTable("Winners");
                 });
@@ -186,8 +180,8 @@ namespace LotteryWeb.Migrations
             modelBuilder.Entity("LotteryWeb.Models.Entity.Winner", b =>
                 {
                     b.HasOne("LotteryWeb.Models.Entity.Bet", "Bet")
-                        .WithMany("Winners")
-                        .HasForeignKey("BetId")
+                        .WithOne("Winner")
+                        .HasForeignKey("LotteryWeb.Models.Entity.Winner", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -196,7 +190,7 @@ namespace LotteryWeb.Migrations
 
             modelBuilder.Entity("LotteryWeb.Models.Entity.Bet", b =>
                 {
-                    b.Navigation("Winners");
+                    b.Navigation("Winner");
                 });
 
             modelBuilder.Entity("LotteryWeb.Models.Entity.Lottery", b =>

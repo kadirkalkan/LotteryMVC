@@ -35,7 +35,7 @@
                                         <span class="font-weight-bold border border-dark p-2">@item.UserNumbers[i]</span>
                                     }
                                 </td>
-                                <td>
+                                <td class="text-center">
                                     @if (item.LotteryStatus == "Çekilmedi")
                                     {
                                         <span>Henüz Çekilmedi !</span>
@@ -45,9 +45,8 @@
                                         @item.MatchCount <span>Adet</span>
                                     }
                                 </td>
-                                <td class="text-right">
+                                <td class="text-center">
                                     <a class="btn btn-success" asp-controller="Home" asp-action="Details" asp-route-id="@item.BetId">Detaylar</a>
-                                    <a class="btn btn-danger" href="#">Sil</a>
                                 </td>
                             </tr>
                         }
