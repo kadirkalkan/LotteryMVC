@@ -1,0 +1,58 @@
+﻿@model List<LotteryDetailsViewModel>
+@{
+    var successMessage = TempData["successMessage"];
+    var errorMessage = TempData["errorMessage"];
+}
+@if (successMessage != null)
+{
+    <div class="alert alert-success">@TempData["successMessage"]</div>
+
+}
+
+<table class="table table-bordered">
+
+    <thead>
+        @if (Model.Count == 0)
+        {
+            <tr>
+                <td>Aktif çekiliş yok, bahis yapabilmek için önce <a class="font-weight-bold" asp-action="PlanLottery">BURADAN</a> yeni çekiliş planlayın.</td>
+            </tr>
+        }
+        else
+        {
+            <tr>
+                <th>Numaralar</th>
+                <th>Oluşturulma Tarihi</th>
+                <th>Çekiliş Tarihi</th>
+                <th></th>
+            </tr>
+        }
+
+    </thead>
+    <tbody>
+
+        @foreach (var lottery in Model)
+        {
+            <tr>
+                <td>@lottery.Number1 - @lottery.Number2 - @lottery.Number3 - @lottery.Number4 - @lottery.Number5 - @lottery.Number6 </td>
+                <td>@lottery.CreateDate</td>
+                <td>@lottery.DrawDate</td>
+                <td>
+                    <a class="btn btn-sm btn-outline-dark" asp-action="Draw" asp-controller="Lottery" asp-route-id="@lottery.Id">Çekiliş Yap</a>
+                    <a class="btn btn-sm btn-outline-dark" asp-action="SeeResults" asp-controller="Lottery" asp-route-id="@lottery.Id">Sonuçları Gör</a>
+                    @if (lottery.IsBetable)
+                    {
+                        <a class="btn btn-sm btn-outline-dark" asp-action="Play" asp-controller="Bet" asp-route-id="@lottery.Id">Bahis Yap</a>
+                    }
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (errorMessage != null)
+{
+    <div class="alert alert-danger">@TempData["errorMessage"]</div>
+
+}
